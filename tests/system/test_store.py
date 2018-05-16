@@ -12,7 +12,7 @@ class StoreTest(BaseTest):
 
                 self.assertEqual(response.status_code, 201)
                 self.assertIsNotNone(StoreModel.find_by_name('testStore'))
-                self.assertDictEqual({'name': 'testStore', 'items': []},
+                self.assertDictEqual({'id': 1, 'name': 'testStore', 'items': []},
                                      json.loads(response.data))
 
     def test_create_duplicate_store(self):
@@ -41,7 +41,7 @@ class StoreTest(BaseTest):
                 response = client.get('/store/testStore')
 
                 self.assertEqual(response.status_code, 200)
-                self.assertDictEqual({'name': 'testStore', 'items': []}, json.loads(response.data))
+                self.assertDictEqual({'id': 1, 'name': 'testStore', 'items': []}, json.loads(response.data))
 
 
     def test_store_not_found(self):
@@ -59,7 +59,7 @@ class StoreTest(BaseTest):
                 ItemModel('testItem', 19.99, 1).save_to_db()
 
                 response = client.get('/store/testStore')
-                expected = {'name': 'testStore', 'items': [{'name': 'testItem', 'price': 19.99}]}
+                expected = {'id': 1, 'name': 'testStore', 'items': [{'name': 'testItem', 'price': 19.99}]}
 
                 self.assertEqual(response.status_code, 200)
                 self.assertDictEqual(expected, json.loads(response.data))
@@ -72,7 +72,7 @@ class StoreTest(BaseTest):
                 response = client.get('/stores')
 
                 self.assertEqual(response.status_code, 200)
-                self.assertDictEqual({'stores': [{'name': 'testStore', 'items': []}]}, json.loads(response.data))
+                self.assertDictEqual({'stores': [{'id': 1, 'name': 'testStore', 'items': []}]}, json.loads(response.data))
 
 
     def test_store_list_with_items(self):
@@ -87,11 +87,11 @@ class StoreTest(BaseTest):
 
                 response = client.get('/stores')
                 expected = {'stores': [
-                    {'name': 'testStore', 'items': [
+                    {'id': 1, 'name': 'testStore', 'items': [
                         {'name': 'testItem', 'price': 19.99},
                         {'name': 'another', 'price': 9.99}
                     ]},
-                    {'name': 'testShop', 'items': [
+                    {'id': 2, 'name': 'testShop', 'items': [
                         {'name': 'car', 'price': 2.65},
                         {'name': 'vehicle', 'price': 1.33}
                     ]}
